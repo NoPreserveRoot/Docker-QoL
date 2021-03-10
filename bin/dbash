@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+	echo "No args provided."
+	echo "Usage: dbash (CONTAINER_NAME)"
+	echo "Container name is case sensitive"
+else
+	CONT_ID=$(docker ps | grep $1 | cut -d' ' -f1)
+	#ID_TOTAL=$(echo $CONT_ID | grep -o ' ' | wc -l)
+	ID_CHARS=$(echo $CONT_ID | wc -c)
+	if [ $ID_CHARS -lt 13 ]; then
+		echo "Container not found."
+		exit 1
+	elif [ $ID_CHARS -gt 14 ]; then
+	    echo "Too many IDs found. Maybe containers are similarly named?"
+		exit 2
+	fi
+	docker exec -it $CONT_ID bash
+fi
